@@ -1,53 +1,55 @@
 #include "main.hpp"
 
 ESP8266WiFiMulti wifiMulti;
-AsyncWebServer server(80);
+AsyncWebServer server( 80 );
 bool connectioWasAlive = false;
 
-void setup(void) {
-  Serial.begin(115200);
-  Serial.setDebugOutput(true);
+elm_comm elm;
 
-  // Create a file `include/secrets.h` with String wifi_aps[n][2] for n access points, with each AP={"SSID", "PASSWORD"}
-  for (auto ap : wifi_aps) {
-    wifiMulti.addAP(ap[0].c_str(), ap[1].c_str());
-  }
+void setup( void ) {
+    Serial.begin( 115200 );
+    Serial.setDebugOutput( true );
 
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(200, "text/plain", "Hi! This is ElegantOTA AsyncDemo.");
-  });
-
-  ElegantOTA.begin(&server);    // Start ElegantOTA
-  server.begin();
-}
-
-bool monitorWiFi()
-{
-  if (wifiMulti.run() != WL_CONNECTED)
-  {
-    if (connectioWasAlive == true)
-    {
-      connectioWasAlive = false;
-      Serial.print("Looking for WiFi ");
+    // Create a file `include/secrets.h` with String wifi_aps[n][2] for n access points, with each
+    // AP={"SSID", "PASSWORD"}
+    for ( auto ap : wifi_aps ) {
+        wifiMulti.addAP( ap[0].c_str(), ap[1].c_str() );
     }
-    return false;
-  }
-  else if (connectioWasAlive == false)
-  {
-    connectioWasAlive = true;
-    Serial.printf("Wifi connected to %s with IP %s\n", WiFi.SSID().c_str(), WiFi.localIP().toString().c_str());
-  }
-  return true;
+
+    server.on( "/", HTTP_GET, []( AsyncWebServerRequest *request ) {
+        request->send( 200, "text/plain", "Hi! This is ElegantOTA AsyncDemo." );
+    } );
+
+    ElegantOTA.begin( &server ); // Start ElegantOTA
+    server.begin();
+
+    elm.init();
 }
 
-void loop(void) {
-  if (monitorWiFi()) {
-    ElegantOTA.loop();
-  }
+bool monitorWiFi() {
+    if ( wifiMulti.run() != WL_CONNECTED ) {
+        if ( connectioWasAlive == true ) {
+            connectioWasAlive = false;
+            Serial.print( "Looking for WiFi " );
+        }
+        return false;
+    } else if ( connectioWasAlive == false ) {
+        connectioWasAlive = true;
+        Serial.printf( "Wifi connected to %s with IP %s\n", WiFi.SSID().c_str(), WiFi.localIP().toString().c_str() );
+    }
+    return true;
+}
 
-  if (Serial.available()) {
-    Serial.write(Serial.read());
-  }
+void loop( void ) {
+    if ( monitorWiFi() ) {
+        ElegantOTA.loop();
+    }
 
-  delay(5);
+    if ( Serial.available() ) {
+        Serial.write( Serial.read() );
+    }
+
+    elm.tick();
+
+    delay( 5 );
 }
