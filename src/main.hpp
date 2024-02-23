@@ -5,7 +5,10 @@
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <ElegantOTA.h>
+#include <TaskScheduler.h>
 
 #include "secrets.h"
 
 #include "elm_comm.hpp"
+
+void initElmCb();

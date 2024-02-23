@@ -10,11 +10,13 @@ class elm_comm {
     void init();
     void tick();
 
+    bool isInitialized() { return hasInitializedElm; }
+    void initializeElm();
+
   private:
     SoftwareSerial *btser;
     ELM327 *elm;
 
-    void initializeElm();
     bool hasInitializedElm = false;
 
     unsigned long lastLoop = 0;

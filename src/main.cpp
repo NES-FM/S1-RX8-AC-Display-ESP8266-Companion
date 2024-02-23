@@ -6,6 +6,9 @@ bool connectioWasAlive = false;
 
 elm_comm elm;
 
+Scheduler ts;
+Task initElm( 3000 * TASK_MILLISECOND, -1, &initElmCb, &ts, true );
+
 void setup( void ) {
     Serial.begin( 115200 );
     Serial.setDebugOutput( true );
@@ -52,4 +55,11 @@ void loop( void ) {
     elm.tick();
 
     delay( 5 );
+}
+
+void initElmCb() {
+    if ( !elm.isInitialized() )
+        elm.initializeElm();
+    else
+        initElm.disable();
 }
