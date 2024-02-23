@@ -7,6 +7,8 @@
 #include <ElegantOTA.h>
 #include <TaskScheduler.h>
 
+#include "espComm.hpp"
+#include "logger.h"
 #include "secrets.h"
 
 #include "elm_comm.hpp"

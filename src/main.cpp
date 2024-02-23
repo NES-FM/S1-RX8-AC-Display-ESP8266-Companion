@@ -9,9 +9,10 @@ elm_comm elm;
 Scheduler ts;
 Task initElm( 3000 * TASK_MILLISECOND, -1, &initElmCb, &ts, true );
 
+espComm ard( Serial );
+
 void setup( void ) {
-    Serial.begin( 115200 );
-    Serial.setDebugOutput( true );
+    ard.init();
 
     // Create a file `include/secrets.h` with String wifi_aps[n][2] for n access points, with each
     // AP={"SSID", "PASSWORD"}
@@ -62,4 +63,15 @@ void initElmCb() {
         elm.initializeElm();
     else
         initElm.disable();
+}
+
+void logger_log_formatted_string( const char *format, ... ) {
+    va_list args;
+    va_start( args, format );
+
+    char str[256];
+    vsprintf( str, format, args );
+
+    ard.debugData( str );
+    va_end( args );
 }
