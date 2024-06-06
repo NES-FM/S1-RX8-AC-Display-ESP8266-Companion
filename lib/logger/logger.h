@@ -30,8 +30,6 @@ const char *pathToFileName( const char *path );
 #define debug_inline_end()
 #endif
 
-void logger_init();
-String logger_tick();
 void logger_log_formatted_string( const char *format, ... );
 
 #endif
