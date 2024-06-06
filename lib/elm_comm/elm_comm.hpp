@@ -1,9 +1,10 @@
 #pragma once
 #include <Arduino.h>
-#include <ELMduino.h>
-#include <SoftwareSerial.h>
+#include <ELMo.h>
 
 #include "../../include/pins.h"
+
+#include "logger.h"
 
 class elm_comm {
   public:
@@ -14,8 +15,7 @@ class elm_comm {
     void initializeElm();
 
   private:
-    SoftwareSerial *btser;
-    ELM327 *elm;
+    ELMo* elm;
 
     bool hasInitializedElm = false;
 
